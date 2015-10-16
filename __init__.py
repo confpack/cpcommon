@@ -13,3 +13,12 @@ def verify_file_exists_or_sysexit(path, argparser=None):
       argparser.print_help()
 
     sys.exit(1)
+
+
+def verify_directory_exists_or_sysexit(path, argparser=None):
+  if not os.path.isdir(path):
+    print("error: {} is not a valid directory".format(path), file=sys.stderr)
+    if argparser:
+      argparser.print_help()
+
+    sys.exit(1)
