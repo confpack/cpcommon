@@ -17,7 +17,21 @@ def get_class_name(command):
   return "{}Main".format(camelized_command)
 
 
-class HelpMain(object):
+class Command(object):
+  def __init__(self):
+    pass
+
+  def get_description(self):
+    return "No description for this command. Please fill it out!"
+
+  def get_help(self):
+    return "No help found for this command. Please fill it out!"
+
+  def __call__(self, argv):
+    raise NotImplementedError
+
+
+class HelpMain(Command):
   def __init__(self, cmds=None):
     self.cmds = cmds
 
