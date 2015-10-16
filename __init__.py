@@ -1,5 +1,7 @@
 from __future__ import print_function, absolute_import
 
+from contextlib import contextmanager
+import os
 import os.path
 import sys
 
@@ -22,3 +24,13 @@ def verify_directory_exists_or_sysexit(path, argparser=None):
       argparser.print_help()
 
     sys.exit(1)
+
+
+@contextmanager
+def cd(newdir):
+    prevdir = os.getcwd()
+    os.chdir(os.path.expanduser(newdir))
+    try:
+        yield
+    finally:
+        os.chdir(prevdir)
