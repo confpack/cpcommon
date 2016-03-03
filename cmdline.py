@@ -1,7 +1,18 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 
+import logging
 import re
 import sys
+
+from .exceptions import NoBacktraceError
+
+# Set some default format for all the executables
+logging.basicConfig(
+  format="[%(asctime)s][%(levelname)s] %(message)s",
+  datefmt="%Y-%m-%d %H:%M:%S",
+  level=logging.DEBUG
+)
+
 
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')
 all_cap_re = re.compile('([a-z0-9])([A-Z])')
@@ -81,7 +92,11 @@ class Cmdline(object):
     if cls_name == "HelpMain":
       p = self.cmds[cls_name](self.cmds)
     elif cls_name in self.cmds:
-      p = self.cmds[cls_name]()
+      try:
+        p = self.cmds[cls_name]()
+      except NoBacktraceError as e:
+        print("error: " + str(e), file=sys.stderr)
+        sys.exit(1)
     else:
       p = HelpMain(self.cmds)
       argv.insert(0, command)
